@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaySay — Regarde des pubs. Gagne des points.</title>
+  <style>
+    /* --- CSS SYSTEM & RESET --- */
+    :root {
+      --bg-main: #0B0F19;
+      --bg-card: #151C2C;
+      --bg-card-hover: #1E273B;
+      --accent: #2563EB;
+      --accent-hover: #3B82F6;
+      --accent-glow: rgba(37, 99, 235, 0.35);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 16px;
+      --max-width: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 40px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- UTILITIES & NAVIGATION --- */
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: var(--accent-hover);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    /* --- BUTTONS --- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--accent);
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 99px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-card-hover);
+      box-shadow: none;
+    }
+
+    /* --- HERO SECTION --- */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--accent-hover);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+      max-width: 800px;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 32px;
+    }
+
+    /* --- DASHBOARD PREVIEW / METRICS --- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 40px 0 80px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: left;
+    }
+
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .stat-card .subtext {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* --- SECTION LAYOUTS --- */
+    .section {
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-title h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    /* --- STEPS GRID --- */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .step-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .step-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* --- CONTENT BOXES (Partners & How it works) --- */
+    .content-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin-bottom: 24px;
+    }
+
+    .content-box h3 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .content-box p {
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .content-box ul {
+      list-style-position: inside;
+      color: var(--text-muted);
+    }
+
+    .content-box li {
+      margin-bottom: 8px;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      list-style: none;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-main);
+    }
+
+    .copyright {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* --- RESPONSIVE MOBILE ADJUSTMENTS --- */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none; /* Simplification pour la démo mobile */
+      }
+      .hero {
+        padding: 50px 0 40px;
+      }
+      .content-box {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <header>
+    <div class="container">
+      <nav>
+        <a href="#" class="logo">Say<span>Say</span></a>
+        <ul class="nav-links">
+          <li><a href="#fonctionnement">Comment ça marche</a></li>
+          <li><a href="#partenaires">Pour les partenaires</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="openLoginModal()">Connexion</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="badge">Plateforme en cours de développement</div>
+      <h1>Regarde des pubs.<br>Gagne des points.</h1>
+      <p>Transforme ton temps en récompenses en regardant des publicités interactives et engageantes.</p>
+      <button class="btn" onclick="openRegisterModal()">Commencer</button>
+    </section>
+
+    <!-- SYSTÈME DE POINTS & RETRAITS -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Valeur des points</div>
+        <div class="value">5 points = 0,01 €</div>
+        <div class="subtext">Le nombre de points varie selon le type et la durée de la publicité visionnée.</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Seuil de retrait</div>
+        <div class="value">Minimum 5,00 €</div>
+        <div class="subtext">Transfert via PayPal prévu dès l'activation du système de paiement.</div>
+      </div>
+    </section>
+
+    <!-- ÉTAPES D'UTILISATION -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Comment ça marche ?</h2>
+        <p>Un parcours simple et rapide pour accumuler vos premières récompenses.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Crée ton compte</h3>
+          <p>Inscription rapide en quelques secondes pour accéder au tableau de bord.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Regarde une pub</h3>
+          <p>Choisis parmi les campagnes vidéo ou visuelles disponibles.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Reçois tes points</h3>
+          <p>Dès la validation de la vue, tes points sont ajoutés à ton solde.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <h3>Échange tes points</h3>
+          <p>Demande un virement dès l'atteinte du solde minimum requis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION COMMENT ÇA MARCHE EN DÉTAILS -->
+    <section id="fonctionnement" class="section">
+      <div class="content-box">
+        <h3>Détails du fonctionnement</h3>
+        <p>SaySay met en relation des annonceurs souhaitant promouvoir des produits et des utilisateurs prêts à accorder du temps d'attention.</p>
+        <ul>
+          <li>L'utilisateur sélectionne une publicité disponible sur la plateforme.</li>
+          <li>Après visionnage complet, le partenaire publicitaire valide la vue (postback).</li>
+          <li>Les points sont crédités de manière transparente sur le profil.</li>
+          <li>Le retrait peut être demandé dès que le solde atteint la valeur équivalente à 5 €.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION POUR LES PARTENAIRES -->
+    <section id="partenaires" class="section">
+      <div class="content-box">
+        <h3>Pour les Partenaires & Annonceurs</h3>
+        <p>Vous êtes un réseau publicitaire ou une entreprise et souhaitez promouvoir vos offres ? SaySay offre un cadre optimisé pour engager une audience qualifiée.</p>
+        <ul>
+          <li>Format d'attention garantie sur vos visuels et contenus vidéo.</li>
+          <li>Intégration via API et sécurisation des conversions par Webhooks/Postbacks.</li>
+          <li>Statistiques et suivi d'engagement en temps réel.</li>
+        </ul>
+        <button class="btn btn-secondary" style="margin-top: 12px;" onclick="contactPartners()">Devenir partenaire</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p class="copyright">SaySay — Plateforme de récompenses publicitaires</p>
+      <ul class="footer-links">
+        <li><a href="#">Conditions d'utilisation</a></li>
+        <li><a href="#">Politique de confidentialité</a></li>
+        <li><a href="mailto:contact@saysay.com">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- SCRIPT BASE ET PRÉPARATION DES INTÉGRATIONS FUTURES -->
+  <script>
+    /**
+     * SAYSAY CORE APP ARCHITECTURE (PRÉPARATION TECHNIQUE)
+     * Ce module contient la structure pour les connexions, 
+     * l'intégration des API d'offres (Lootably), les Postbacks et PayPal.
+     */
+
+    const SaySayApp = {
+      user: null,
+      pointsBalance: 0,
+      minPayoutEur: 5.00,
+      pointsPerCent: 5, // 5 pts = 0.01 € -> 100 pts = 0.20 € -> 2500 pts = 5.00 €
+
+      // 1. Authentification
+      login: function(email, password) {
+        console.log("Connexion de l'utilisateur...", email);
+        // TODO: Appeler l'API de connexion backend (ex: Firebase / Node.js API)
+      },
+
+      register: function(email, password) {
+        console.log("Création du compte...", email);
+        // TODO: Enregistrer l'utilisateur en base de données
+      },
+
+      // 2. Intégration API Publicitaire (ex: Lootably / Offerwalls)
+      loadAdOfferwall: function(containerId) {
+        console.log("Initialisation de l'Iframe ou de l'API Lootably...");
+        /* 
+          Exemple d'intégration future :
+          const userId = this.user ? this.user.id : 'guest';
+          const iframeSrc = `https://lootably.com/offerwall/YOUR_PLACEMENT_ID?user_id=${userId}`;
+          document.getElementById(containerId).src = iframeSrc;
+        */
+      },
+
+      // 3. Gestion des Postbacks (Côté Serveur - Simulation de réception)
+      handlePostbackReward: function(userId, pointsEarned, transactionId) {
+        console.log(`Postback reçu : ${pointsEarned} points attribués à l'utilisateur ${userId}. TransID: ${transactionId}`);
+        // Le crédit effectif des points doit toujours être validé côté serveur.
+      },
+
+      // 4. Demande de Retrait (PayPal)
+      requestPayout: function(paypalEmail) {
+        const eurValue = this.pointsBalance / (this.pointsPerCent * 100);
+        if (eurValue < this.minPayoutEur) {
+          alert(`Le solde minimum pour effectuer un retrait est de ${this.minPayoutEur} €.`);
+          return;
+        }
+        console.log(`Demande de retrait de ${eurValue} € vers ${paypalEmail} envoyée.`);
+        // TODO: Transmettre la demande de retrait au backend
+      }
+    };
+
+    // Actions d'interface simples
+    function openLoginModal() {
+      alert("Le système de connexion est actuellement en cours de développement.");
+    }
+
+    function openRegisterModal() {
+      alert("Les inscriptions ouvriront très prochainement lors du lancement officiel.");
+    }
+
+    function contactPartners() {
+      window.location.href = "mailto:partners@saysay.com?subject=Demande de partenariat Annonceur";
+    }
+  </script>
+</body>
+</html>
