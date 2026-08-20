@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SaySay — Regarde des pubs. Gagne des points.</title>
+  <title>SaySay — Bot & Communauté Discord</title>
   <style>
     /* --- CSS SYSTEM & RESET --- */
     :root {
       --bg-main: #0B0F19;
       --bg-card: #151C2C;
       --bg-card-hover: #1E273B;
-      --accent: #2563EB;
-      --accent-hover: #3B82F6;
-      --accent-glow: rgba(37, 99, 235, 0.35);
+      --accent: #5865F2; /* Bleu Discord */
+      --accent-hover: #4752C4;
+      --accent-glow: rgba(88, 101, 242, 0.35);
       --text-main: #F8FAFC;
       --text-muted: #94A3B8;
       --border: rgba(255, 255, 255, 0.08);
@@ -35,7 +35,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- UTILITIES & NAVIGATION --- */
     .container {
       width: 100%;
       max-width: var(--max-width);
@@ -43,6 +42,7 @@
       padding: 0 20px;
     }
 
+    /* --- HEADER & NAVIGATION --- */
     header {
       position: sticky;
       top: 0;
@@ -59,19 +59,29 @@
       height: 70px;
     }
 
-    .logo {
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .logo-text {
       font-size: 1.5rem;
       font-weight: 800;
       color: var(--text-main);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
       letter-spacing: -0.5px;
     }
 
-    .logo span {
-      color: var(--accent-hover);
+    .logo-text span {
+      color: var(--accent);
     }
 
     .nav-links {
@@ -91,11 +101,12 @@
       color: var(--text-main);
     }
 
-    /* --- BUTTONS --- */
+    /* --- BOUTONS --- */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 10px;
       background-color: var(--accent);
       color: #fff;
       padding: 12px 28px;
@@ -123,7 +134,12 @@
 
     .btn-secondary:hover {
       background-color: var(--bg-card-hover);
-      box-shadow: none;
+    }
+
+    .discord-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
     }
 
     /* --- HERO SECTION --- */
@@ -136,10 +152,12 @@
     }
 
     .badge {
-      display: inline-block;
-      background: rgba(37, 99, 235, 0.15);
-      color: var(--accent-hover);
-      border: 1px solid rgba(37, 99, 235, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(88, 101, 242, 0.15);
+      color: #7983f5;
+      border: 1px solid rgba(88, 101, 242, 0.3);
       padding: 6px 16px;
       border-radius: 99px;
       font-size: 0.85rem;
@@ -163,7 +181,14 @@
       margin-bottom: 32px;
     }
 
-    /* --- DASHBOARD PREVIEW / METRICS --- */
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* --- GRILLE D'INFORMATIONS --- */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -199,7 +224,7 @@
       margin-top: 6px;
     }
 
-    /* --- SECTION LAYOUTS --- */
+    /* --- SECTIONS --- */
     .section {
       padding: 60px 0;
       border-top: 1px solid var(--border);
@@ -222,7 +247,6 @@
       margin: 0 auto;
     }
 
-    /* --- STEPS GRID --- */
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -234,7 +258,6 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 28px;
-      position: relative;
       transition: transform 0.2s;
     }
 
@@ -265,7 +288,6 @@
       color: var(--text-muted);
     }
 
-    /* --- CONTENT BOXES (Partners & How it works) --- */
     .content-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -277,7 +299,6 @@
     .content-box h3 {
       font-size: 1.4rem;
       margin-bottom: 12px;
-      color: var(--text-main);
     }
 
     .content-box p {
@@ -326,17 +347,10 @@
       color: var(--text-muted);
     }
 
-    /* --- RESPONSIVE MOBILE ADJUSTMENTS --- */
     @media (max-width: 768px) {
-      .nav-links {
-        display: none; /* Simplification pour la démo mobile */
-      }
-      .hero {
-        padding: 50px 0 40px;
-      }
-      .content-box {
-        padding: 24px;
-      }
+      .nav-links { display: none; }
+      .hero { padding: 50px 0 40px; }
+      .content-box { padding: 24px; }
     }
   </style>
 </head>
@@ -346,12 +360,19 @@
   <header>
     <div class="container">
       <nav>
-        <a href="#" class="logo">Say<span>Say</span></a>
+        <a href="#" class="logo-container">
+          <!-- Logo Discord IMG_0327.webp -->
+          <img src="IMG_0327.webp" alt="Logo SaySay Discord" class="logo-img" onerror="this.src='https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png';">
+          <span class="logo-text">Say<span>Say</span></span>
+        </a>
         <ul class="nav-links">
           <li><a href="#fonctionnement">Comment ça marche</a></li>
-          <li><a href="#partenaires">Pour les partenaires</a></li>
+          <li><a href="#partenaires">Partenaires</a></li>
         </ul>
-        <button class="btn btn-secondary" onclick="openLoginModal()">Connexion</button>
+        <!-- Bouton pour ajouter le bot directement -->
+        <a href="https://discord.com/oauth2/authorize?client_id=TON_CLIENT_ID&scope=bot&permissions=8" target="_blank" class="btn btn-secondary">
+          Ajouter le Bot
+        </a>
       </nav>
     </div>
   </header>
@@ -360,82 +381,90 @@
 
     <!-- HERO SECTION -->
     <section class="hero">
-      <div class="badge">Plateforme en cours de développement</div>
+      <div class="badge">
+        <img src="IMG_0327.webp" alt="Discord" style="width: 16px; height: 16px; border-radius: 50%;" onerror="this.style.display='none'">
+        Bot & Serveur Discord Officiel
+      </div>
       <h1>Regarde des pubs.<br>Gagne des points.</h1>
-      <p>Transforme ton temps en récompenses en regardant des publicités interactives et engageantes.</p>
-      <button class="btn" onclick="openRegisterModal()">Commencer</button>
+      <p>Transforme ton temps en récompenses directement sur Discord en regardant des publicités via notre Bot SaySay.</p>
+      
+      <div class="hero-buttons">
+        <a href="https://discord.gg/TON_LIEN_DE_INVITATION" target="_blank" class="btn">
+          <svg class="discord-icon" viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.87,53,48.81,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.11,53,91.08,65.69,84.69,65.69Z"/></svg>
+          Rejoindre le Serveur Discord
+        </a>
+        <a href="https://discord.com/oauth2/authorize?client_id=TON_CLIENT_ID&scope=bot&permissions=8" target="_blank" class="btn btn-secondary">
+          Ajouter le Bot
+        </a>
+      </div>
     </section>
 
-    <!-- SYSTÈME DE POINTS & RETRAITS -->
+    <!-- SYSTEME DE POINTS ET RETRAITS -->
     <section class="stats-grid">
       <div class="stat-card">
         <div class="label">Valeur des points</div>
         <div class="value">5 points = 0,01 €</div>
-        <div class="subtext">Le nombre de points varie selon le type et la durée de la publicité visionnée.</div>
+        <div class="subtext">Le nombre de points attribués peut dépendre de la publicité regardée via le Bot.</div>
       </div>
       <div class="stat-card">
-        <div class="label">Seuil de retrait</div>
-        <div class="value">Minimum 5,00 €</div>
-        <div class="subtext">Transfert via PayPal prévu dès l'activation du système de paiement.</div>
+        <div class="label">Retraits</div>
+        <div class="value">Minimum : 5 €</div>
+        <div class="subtext">Les retraits pourront être effectués via PayPal lorsque le système de paiement sera disponible.</div>
       </div>
     </section>
 
-    <!-- ÉTAPES D'UTILISATION -->
+    <!-- ETAPES D'UTILISATION -->
     <section class="section">
       <div class="section-title">
-        <h2>Comment ça marche ?</h2>
-        <p>Un parcours simple et rapide pour accumuler vos premières récompenses.</p>
+        <h2>Comment ça marche sur Discord ?</h2>
+        <p>Utilise notre Bot Discord pour accumuler tes points simplement.</p>
       </div>
 
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-number">1</div>
-          <h3>Crée ton compte</h3>
-          <p>Inscription rapide en quelques secondes pour accéder au tableau de bord.</p>
+          <h3>Rejoins le Discord</h3>
+          <p>Rejoins notre serveur ou ajoute le Bot SaySay sur ton propre serveur.</p>
         </div>
         <div class="step-card">
           <div class="step-number">2</div>
           <h3>Regarde une pub</h3>
-          <p>Choisis parmi les campagnes vidéo ou visuelles disponibles.</p>
+          <p>Lance la commande du Bot pour afficher et regarder une publicité disponible.</p>
         </div>
         <div class="step-card">
           <div class="step-number">3</div>
           <h3>Reçois tes points</h3>
-          <p>Dès la validation de la vue, tes points sont ajoutés à ton solde.</p>
+          <p>Une fois la pub validée, le Bot crédite automatiquement tes points sur ton compte.</p>
         </div>
         <div class="step-card">
           <div class="step-number">4</div>
           <h3>Échange tes points</h3>
-          <p>Demande un virement dès l'atteinte du solde minimum requis.</p>
+          <p>Atteins le solde minimum et demande ton retrait en toute sécurité.</p>
         </div>
       </div>
     </section>
 
-    <!-- SECTION COMMENT ÇA MARCHE EN DÉTAILS -->
+    <!-- DETAIL DU FONCTIONNEMENT -->
     <section id="fonctionnement" class="section">
       <div class="content-box">
-        <h3>Détails du fonctionnement</h3>
-        <p>SaySay met en relation des annonceurs souhaitant promouvoir des produits et des utilisateurs prêts à accorder du temps d'attention.</p>
+        <h3>Explication du fonctionnement</h3>
+        <p>SaySay est une plateforme en développement intégrant un Bot Discord interactif :</p>
         <ul>
-          <li>L'utilisateur sélectionne une publicité disponible sur la plateforme.</li>
-          <li>Après visionnage complet, le partenaire publicitaire valide la vue (postback).</li>
-          <li>Les points sont crédités de manière transparente sur le profil.</li>
-          <li>Le retrait peut être demandé dès que le solde atteint la valeur équivalente à 5 €.</li>
+          <li>L'utilisateur regarde une publicité disponible directement ou via nos liens sécurisés.</li>
+          <li>Une fois la publicité complètement validée, le Bot reçoit la confirmation et crédite le compte.</li>
+          <li>Les points sont cumulés sur ton profil Discord.</li>
+          <li>Lorsque le solde minimum de 5 € est atteint, l'utilisateur peut effectuer une demande de retrait.</li>
         </ul>
       </div>
     </section>
 
-    <!-- SECTION POUR LES PARTENAIRES -->
+    <!-- PAGE POUR LES PARTENAIRES -->
     <section id="partenaires" class="section">
       <div class="content-box">
         <h3>Pour les Partenaires & Annonceurs</h3>
-        <p>Vous êtes un réseau publicitaire ou une entreprise et souhaitez promouvoir vos offres ? SaySay offre un cadre optimisé pour engager une audience qualifiée.</p>
-        <ul>
-          <li>Format d'attention garantie sur vos visuels et contenus vidéo.</li>
-          <li>Intégration via API et sécurisation des conversions par Webhooks/Postbacks.</li>
-          <li>Statistiques et suivi d'engagement en temps réel.</li>
-        </ul>
-        <button class="btn btn-secondary" style="margin-top: 12px;" onclick="contactPartners()">Devenir partenaire</button>
+        <p>Vous souhaitez diffuser vos campagnes auprès des membres de notre communauté Discord et de notre Bot SaySay ?</p>
+        <p>SaySay permet de proposer vos campagnes publicitaires à une audience active et engagée directement sur Discord.</p>
+        <a href="https://discord.gg/TON_LIEN_DE_INVITATION" target="_blank" class="btn btn-secondary" style="margin-top: 12px;">Contact Annoceurs sur Discord</a>
       </div>
     </section>
 
@@ -448,77 +477,10 @@
       <ul class="footer-links">
         <li><a href="#">Conditions d'utilisation</a></li>
         <li><a href="#">Politique de confidentialité</a></li>
-        <li><a href="mailto:contact@saysay.com">Contact</a></li>
+        <li><a href="https://discord.gg/TON_LIEN_DE_INVITATION" target="_blank">Contact Discord</a></li>
       </ul>
     </div>
   </footer>
 
-  <!-- SCRIPT BASE ET PRÉPARATION DES INTÉGRATIONS FUTURES -->
-  <script>
-    /**
-     * SAYSAY CORE APP ARCHITECTURE (PRÉPARATION TECHNIQUE)
-     * Ce module contient la structure pour les connexions, 
-     * l'intégration des API d'offres (Lootably), les Postbacks et PayPal.
-     */
-
-    const SaySayApp = {
-      user: null,
-      pointsBalance: 0,
-      minPayoutEur: 5.00,
-      pointsPerCent: 5, // 5 pts = 0.01 € -> 100 pts = 0.20 € -> 2500 pts = 5.00 €
-
-      // 1. Authentification
-      login: function(email, password) {
-        console.log("Connexion de l'utilisateur...", email);
-        // TODO: Appeler l'API de connexion backend (ex: Firebase / Node.js API)
-      },
-
-      register: function(email, password) {
-        console.log("Création du compte...", email);
-        // TODO: Enregistrer l'utilisateur en base de données
-      },
-
-      // 2. Intégration API Publicitaire (ex: Lootably / Offerwalls)
-      loadAdOfferwall: function(containerId) {
-        console.log("Initialisation de l'Iframe ou de l'API Lootably...");
-        /* 
-          Exemple d'intégration future :
-          const userId = this.user ? this.user.id : 'guest';
-          const iframeSrc = `https://lootably.com/offerwall/YOUR_PLACEMENT_ID?user_id=${userId}`;
-          document.getElementById(containerId).src = iframeSrc;
-        */
-      },
-
-      // 3. Gestion des Postbacks (Côté Serveur - Simulation de réception)
-      handlePostbackReward: function(userId, pointsEarned, transactionId) {
-        console.log(`Postback reçu : ${pointsEarned} points attribués à l'utilisateur ${userId}. TransID: ${transactionId}`);
-        // Le crédit effectif des points doit toujours être validé côté serveur.
-      },
-
-      // 4. Demande de Retrait (PayPal)
-      requestPayout: function(paypalEmail) {
-        const eurValue = this.pointsBalance / (this.pointsPerCent * 100);
-        if (eurValue < this.minPayoutEur) {
-          alert(`Le solde minimum pour effectuer un retrait est de ${this.minPayoutEur} €.`);
-          return;
-        }
-        console.log(`Demande de retrait de ${eurValue} € vers ${paypalEmail} envoyée.`);
-        // TODO: Transmettre la demande de retrait au backend
-      }
-    };
-
-    // Actions d'interface simples
-    function openLoginModal() {
-      alert("Le système de connexion est actuellement en cours de développement.");
-    }
-
-    function openRegisterModal() {
-      alert("Les inscriptions ouvriront très prochainement lors du lancement officiel.");
-    }
-
-    function contactPartners() {
-      window.location.href = "mailto:partners@saysay.com?subject=Demande de partenariat Annonceur";
-    }
-  </script>
 </body>
 </html>
