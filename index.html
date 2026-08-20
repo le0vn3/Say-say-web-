@@ -4,33 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaySay — Gagne des récompenses sur Discord</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f1117;
-            --bg-card: #181b23;
-            --bg-card-hover: #202430;
+            --bg-dark: #08090a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.06);
             --primary: #5865f2;
             --primary-hover: #4752c4;
-            --accent-blue: #00b0f4;
-            --text-main: #f6f6f7;
-            --text-muted: #b5bac1;
+            --accent: #8b5cf6;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
             --border: rgba(255, 255, 255, 0.08);
-            --radius-lg: 16px;
-            --radius-sm: 8px;
+            --border-hover: rgba(139, 92, 246, 0.3);
+            --radius-lg: 20px;
+            --radius-sm: 12px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
-            line-height: 1.6;
-            padding-bottom: 60px;
+            line-height: 1.5;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* Ambient Glow Effects */
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(88, 101, 242, 0.25) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        .glow-2 {
+            top: 600px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
         }
 
         a {
@@ -39,20 +70,21 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1140px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         /* Header Nav */
         header {
             position: sticky;
             top: 0;
-            background: rgba(15, 17, 23, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(8, 9, 10, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
             z-index: 100;
-            padding: 16px 0;
+            padding: 18px 0;
         }
 
         .nav-container {
@@ -62,85 +94,126 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--primary), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--primary);
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            background-color: var(--primary);
-            color: #fff;
+            gap: 10px;
+            background-color: var(--text-main);
+            color: #000;
             padding: 12px 24px;
-            border-radius: 28px;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid transparent;
         }
 
         .btn:hover {
-            background-color: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+            background-color: #ffffff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.6);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
         }
 
         .btn-large {
             padding: 16px 36px;
-            font-size: 1.15rem;
-            border-radius: 32px;
+            font-size: 1.05rem;
         }
 
         /* Hero Section */
         .hero {
-            padding: 90px 0 60px;
+            padding: 120px 0 80px;
             text-align: center;
+            position: relative;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 24px;
         }
 
         .hero h1 {
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-size: clamp(2.5rem, 6vw, 4.2rem);
             font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 20px;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #A5A5A5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             font-size: 1.2rem;
             color: var(--text-muted);
-            max-width: 650px;
-            margin: 0 auto 32px;
+            max-width: 680px;
+            margin: 0 auto 40px;
+            font-weight: 400;
         }
 
         /* Common Section Layout */
         section {
-            padding: 60px 0;
+            padding: 80px 0;
         }
 
-        .section-title {
+        .section-header {
             text-align: center;
-            margin-bottom: 40px;
+            max-width: 600px;
+            margin: 0 auto 56px;
         }
 
-        .section-title h2 {
-            font-size: 2rem;
+        .section-header h2 {
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
         }
 
-        .section-title p {
+        .section-header p {
             color: var(--text-muted);
+            font-size: 1.05rem;
         }
 
         /* Cards Grid */
         .grid-4 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
         }
 
@@ -148,116 +221,107 @@
             background-color: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 28px;
-            transition: transform 0.2s ease, background-color 0.2s ease;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
         .card:hover {
             background-color: var(--bg-card-hover);
+            border-color: var(--border-hover);
             transform: translateY(-4px);
         }
 
         .card-icon {
-            font-size: 2rem;
-            margin-bottom: 16px;
-            display: inline-block;
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
         }
 
         .card h3 {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
+            font-weight: 600;
             margin-bottom: 10px;
+            letter-spacing: -0.01em;
         }
 
         .card p {
             color: var(--text-muted);
             font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        /* Value Section Highlights */
-        .value-box {
-            background: linear-gradient(135deg, rgba(88, 101, 242, 0.15), rgba(0, 176, 244, 0.15));
-            border: 1px solid var(--primary);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .value-rates {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .value-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            padding: 12px 24px;
-            border-radius: var(--radius-sm);
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .value-note {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Timeline / Steps */
-        .steps-container {
+        /* Steps Section */
+        .steps-wrapper {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
-            position: relative;
         }
 
         .step-card {
-            background-color: var(--bg-card);
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 24px;
+            padding: 28px;
             position: relative;
         }
 
-        .step-number {
-            width: 32px;
-            height: 32px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .step-num {
+            font-size: 0.85rem;
             font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             margin-bottom: 16px;
-            font-size: 0.9rem;
+            display: block;
         }
 
-        /* List Items */
-        .why-list {
-            list-style: none;
+        .step-card p {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Feature List (Why Join) */
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 16px;
         }
 
-        .why-item {
+        .feature-item {
             background-color: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
-            padding: 18px 20px;
+            padding: 20px 24px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.05rem;
+            gap: 16px;
+            font-weight: 500;
+            transition: border-color 0.2s ease;
+        }
+
+        .feature-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .feature-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
         }
 
         /* FAQ Accordion */
-        .faq-list {
-            max-width: 750px;
+        .faq-wrapper {
+            max-width: 720px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -269,15 +333,20 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             overflow: hidden;
+            transition: border-color 0.2s ease;
         }
 
-        .faq-question {
+        .faq-item:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .faq-button {
             width: 100%;
             text-align: left;
             background: none;
             border: none;
             color: var(--text-main);
-            padding: 20px;
+            padding: 22px 24px;
             font-size: 1.05rem;
             font-weight: 600;
             cursor: pointer;
@@ -286,77 +355,78 @@
             align-items: center;
         }
 
-        .faq-answer {
-            padding: 0 20px 20px;
+        .faq-content {
+            padding: 0 24px 22px;
             color: var(--text-muted);
             font-size: 0.95rem;
             display: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            padding-top: 16px;
+            line-height: 1.6;
         }
 
-        .faq-item.active .faq-answer {
+        .faq-item.active .faq-content {
             display: block;
         }
 
-        .faq-toggle {
+        .faq-icon {
+            transition: transform 0.25s ease;
+            color: var(--text-muted);
             font-size: 1.2rem;
-            transition: transform 0.2s ease;
         }
 
-        .faq-item.active .faq-toggle {
+        .faq-item.active .faq-icon {
             transform: rotate(45deg);
         }
 
-        /* Transparency Box */
-        .disclaimer-box {
-            background-color: rgba(255, 255, 255, 0.02);
-            border: 1px dashed var(--border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
+        /* Banner CTA Bottom */
+        .cta-banner {
+            background: linear-gradient(135deg, rgba(88, 101, 242, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid var(--border-hover);
+            border-radius: 28px;
+            padding: 60px 24px;
             text-align: center;
-            max-width: 800px;
-            margin: 40px auto 0;
+            margin-top: 40px;
         }
 
-        .disclaimer-box h3 {
-            font-size: 1rem;
+        .cta-banner h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .cta-banner p {
             color: var(--text-muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 32px;
         }
 
-        .disclaimer-box p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* Bottom Call to Action */
-        .cta-bottom {
-            text-align: center;
-            padding: 80px 0 40px;
-        }
-
-        /* Responsive adjustments */
+        /* Responsive */
         @media (max-width: 768px) {
             .hero {
-                padding: 50px 0 30px;
+                padding: 60px 0 40px;
             }
-            
+
             .btn-large {
                 width: 100%;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
 
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
     <!-- Header Navigation -->
     <header>
         <div class="container nav-container">
-            <a href="#" class="logo">SaySay</a>
-            <a href="https://discord.gg/6SAzQCEzK9" target="_blank" rel="noopener noreferrer" class="btn">🚀 Rejoindre SaySay</a>
+            <a href="#" class="logo">
+                <span class="logo-badge"></span>
+                SaySay
+            </a>
+            <a href="https://discord.gg/6SAzQCEzK9" target="_blank" rel="noopener noreferrer" class="btn btn-primary">🚀 Rejoindre SaySay</a>
         </div>
     </header>
 
@@ -364,177 +434,148 @@
 
         <!-- Hero Section -->
         <section class="hero">
+            <div class="hero-tag">✨ Plateforme de récompenses Discord</div>
             <h1>SaySay — Gagne des récompenses sur Discord</h1>
             <p>Rejoins SaySay, réalise les activités disponibles sur notre serveur et gagne des points que tu peux ensuite échanger contre des récompenses.</p>
-            <a href="https://discord.gg/6SAzQCEzK9" target="_blank" rel="noopener noreferrer" class="btn btn-large">🚀 Rejoindre SaySay</a>
+            <a href="https://discord.gg/6SAzQCEzK9" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-large">🚀 Rejoindre SaySay</a>
         </section>
 
         <!-- Section: Comment gagner -->
         <section>
-            <div class="section-title">
+            <div class="section-header">
                 <h2>Comment gagner ?</h2>
                 <p>Sur SaySay, tu peux gagner des points en réalisant différentes activités disponibles sur le serveur.</p>
             </div>
 
             <div class="grid-4">
                 <div class="card">
-                    <span class="card-icon">🎬</span>
-                    <h3>Regarder des publicités</h3>
+                    <div class="card-icon">🎬</div>
+                    <h3>Regarder des pubs</h3>
                     <p>Regarde les publicités proposées et, lorsque la vue est correctement validée, reçois tes points.</p>
                 </div>
                 <div class="card">
-                    <span class="card-icon">🎯</span>
-                    <h3>Participer aux activités</h3>
-                    <p>D'autres activités et offres peuvent être disponibles sur le serveur.</p>
+                    <div class="card-icon">🎯</div>
+                    <h3>Participer aux offres</h3>
+                    <p>D'autres activités et offres exclusives peuvent être disponibles sur le serveur.</p>
                 </div>
                 <div class="card">
-                    <span class="card-icon">🏆</span>
+                    <div class="card-icon">🏆</div>
                     <h3>Cumuler des points</h3>
-                    <p>Toutes tes récompenses sont ajoutées à ton solde.</p>
+                    <p>Toutes tes récompenses sont créditées directement sur ton solde personnel.</p>
                 </div>
                 <div class="card">
-                    <span class="card-icon">💸</span>
+                    <div class="card-icon">💸</div>
                     <h3>Échanger tes points</h3>
-                    <p>Lorsque tu atteins le montant requis, tu peux demander une récompense.</p>
+                    <p>Dès que tu as accumulé assez de points, demande l'échange contre tes récompenses.</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Section: Valeur des points -->
-        <section>
-            <div class="value-box">
-                <h2 style="font-size: 1.5rem; margin-bottom: 8px;">Valeur des points</h2>
-                <div class="value-rates">
-                    <div class="value-badge">⭐ 5 points = 0,01 €</div>
-                </div>
-                <p class="value-note">Les récompenses dépendent des activités et campagnes disponibles.</p>
             </div>
         </section>
 
         <!-- Section: Fonctionnement d'une pub -->
         <section>
-            <div class="section-title">
+            <div class="section-header">
                 <h2>Comment fonctionne une pub ?</h2>
-                <p>Le processus de validation en 4 étapes simples :</p>
+                <p>Un processus simple et automatisé en 4 étapes :</p>
             </div>
 
-            <div class="steps-container">
+            <div class="steps-wrapper">
                 <div class="step-card">
-                    <div class="step-number">1</div>
+                    <span class="step-num">Étape 01</span>
                     <p>Clique sur <strong>Regarder une pub</strong></p>
                 </div>
                 <div class="step-card">
-                    <div class="step-number">2</div>
-                    <p>Regarde la <strong>publicité</strong></p>
+                    <span class="step-num">Étape 02</span>
+                    <p>Visionne la <strong>publicité</strong></p>
                 </div>
                 <div class="step-card">
-                    <div class="step-number">3</div>
+                    <span class="step-num">Étape 03</span>
                     <p>La plateforme <strong>vérifie l'activité</strong></p>
                 </div>
                 <div class="step-card">
-                    <div class="step-number">4</div>
-                    <p>Tes points sont <strong>ajoutés à ton compte</strong></p>
+                    <span class="step-num">Étape 04</span>
+                    <p>Tes points sont <strong>crédités sur ton solde</strong></p>
                 </div>
             </div>
-            <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 20px;">
-                * Les points ne sont crédités que lorsque l'activité est validée.
+            <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 24px;">
+                * Les points sont crédités dès que l'activité est officiellement validée.
             </p>
         </section>
 
         <!-- Section: Pourquoi rejoindre SaySay ? -->
         <section>
-            <div class="section-title">
+            <div class="section-header">
                 <h2>Pourquoi rejoindre SaySay ?</h2>
             </div>
 
-            <ul class="why-list">
-                <li class="why-item">🎁 Gagner des points gratuitement en réalisant des activités</li>
-                <li class="why-item">🎬 Regarder des publicités et participer à des offres</li>
-                <li class="why-item">💰 Accumuler des récompenses</li>
-                <li class="why-item">🏆 Participer au classement de la communauté</li>
-                <li class="why-item">💬 Rejoindre une communauté Discord</li>
-                <li class="why-item">🤖 Utiliser le futur bot SaySay directement sur Discord</li>
-            </ul>
+            <div class="features-grid">
+                <div class="feature-item"><span class="feature-icon">✦</span> Gagner des points gratuitement en réalisant des activités</div>
+                <div class="feature-item"><span class="feature-icon">✦</span> Regarder des publicités et participer à des offres</div>
+                <div class="feature-item"><span class="feature-icon">✦</span> Accumuler des récompenses à ton rythme</div>
+                <div class="feature-item"><span class="feature-icon">✦</span> Participer au classement de la communauté</div>
+                <div class="feature-item"><span class="feature-icon">✦</span> Rejoindre une communauté Discord active</div>
+                <div class="feature-item"><span class="feature-icon">✦</span> Utiliser le futur bot SaySay directement sur Discord</div>
+            </div>
         </section>
 
         <!-- Section: FAQ -->
         <section>
-            <div class="section-title">
+            <div class="section-header">
                 <h2>Foire Aux Questions</h2>
             </div>
 
-            <div class="faq-list">
+            <div class="faq-wrapper">
                 <div class="faq-item">
-                    <button class="faq-question">
+                    <button class="faq-button">
                         <span>Comment rejoindre SaySay ?</span>
-                        <span class="faq-toggle">+</span>
+                        <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer">
+                    <div class="faq-content">
                         Clique sur le bouton Rejoindre SaySay et rejoins notre serveur Discord.
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Combien valent les points ?</span>
-                        <span class="faq-toggle">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        5 points correspondent à 0,01 €.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
+                    <button class="faq-button">
                         <span>Est-ce que les gains sont garantis ?</span>
-                        <span class="faq-toggle">+</span>
+                        <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer">
+                    <div class="faq-content">
                         Non. Les points dépendent des activités et campagnes disponibles sur SaySay.
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <button class="faq-question">
+                    <button class="faq-button">
                         <span>Où puis-je obtenir de l'aide ?</span>
-                        <span class="faq-toggle">+</span>
+                        <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer">
+                    <div class="faq-content">
                         Rejoins le serveur Discord et utilise le canal de support.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Transparence / Important -->
-        <section style="padding-top: 20px;">
-            <div class="disclaimer-box">
-                <h3>Important</h3>
-                <p>SaySay est un système de récompenses basé sur des activités sponsorisées et publicitaires. Les disponibilités et récompenses peuvent varier. Aucun revenu minimum n'est garanti.</p>
-            </div>
-        </section>
-
-        <!-- Bottom Call To Action -->
-        <section class="cta-bottom">
-            <a href="https://discord.gg/6SAzQCEzK9" target="_blank" rel="noopener noreferrer" class="btn btn-large">🚀 Rejoindre SaySay</a>
-        </section>
+        <!-- Bottom CTA Banner -->
+        <div class="cta-banner">
+            <h2>Prêt à commencer ?</h2>
+            <p>Rejoins notre communauté dès aujourd'hui et commence à accumuler des points.</p>
+            <a href="https://discord.gg/6SAzQCEzK9" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-large">🚀 Rejoindre SaySay</a>
+        </div>
 
     </main>
 
     <script>
-        // Gestion de l'ouverture/fermeture de la FAQ
-        document.querySelectorAll('.faq-question').forEach(button => {
+        document.querySelectorAll('.faq-button').forEach(button => {
             button.addEventListener('click', () => {
                 const faqItem = button.parentElement;
                 
-                // Fermer les autres items
                 document.querySelectorAll('.faq-item').forEach(item => {
                     if (item !== faqItem) {
                         item.classList.remove('active');
                     }
                 });
 
-                // Basculer l'état actuel
                 faqItem.classList.toggle('active');
             });
         });
